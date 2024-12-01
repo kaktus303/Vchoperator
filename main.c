@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define n 1000
+#define start 0
+#define finish 10
 double Ai(int i)
 {
     return 0;
@@ -20,6 +22,17 @@ double Fi(int i)
 double utoch(double x)
 {
     return 0;
+}
+void x_filling(double *x_points)
+{
+    double step = (finish - start)/(n-1), x = start;
+    x_points[0] = start;
+    printf("%.15lf", step);
+    for(int i = 1;i < n;++i)
+    {
+        x+=step;
+        x_points[i] = x;
+    }
 }
 int main()
 {
