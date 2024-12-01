@@ -1,0 +1,9 @@
+#! /usr/bin/gnuplot -persist
+set xlabel "X" 
+set ylabel "Y"
+set grid
+set yrange [-4:4]
+set xrange[2:4]
+set title "Method graph" font "Helvetica Bold, 20"
+plot "test.txt" with lines lw 3, (1/x)*exp(x) with lines lw 2
+pause -1
