@@ -1,20 +1,36 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#define n 1000
-#define start 2.0
-#define finish 5.0
+#define n 1001
+#define start -10.0
+#define finish 10.0
+// double Ai(int i, double *x_points, double step)
+// {
+//     return ((x_points[i])/(step*step) - (1/(x_points[i])));
+// }
+// double Bi(int i, double *x_points, double step)
+// {
+//     return ((x_points[i])/(step*step) + (1/(x_points[i])));
+// }
+// double Ci(int i, double *x_points, double step)
+// {
+//     return (-(2*(x_points[i])/(step*step)) - (x_points[i]));
+// }
+// double Fi(int i, double *x_points, double step)
+// {
+//     return 0;
+// }
 double Ai(int i, double *x_points, double step)
 {
-    return ((x_points[i])/(step*step) - (1/(x_points[i])));
+    return ((x_points[i]) - step);
 }
 double Bi(int i, double *x_points, double step)
 {
-    return ((x_points[i])/(step*step) + (1/(x_points[i])));
+    return ((x_points[i]) + step);
 }
 double Ci(int i, double *x_points, double step)
 {
-    return (-(2*(x_points[i])/(step*step)) - (x_points[i]));
+    return (-2 * x_points[i] - x_points[i] * step * step);
 }
 double Fi(int i, double *x_points, double step)
 {
@@ -46,6 +62,16 @@ void file_write(FILE *file_graph, double *points_x, double *points_y)
         fprintf(file_graph, "%.15lf %.15lf\n", points_x[i], points_y[i]);
     }
 }
+double max_error(double *points_x, double *points_y)
+{
+    double max = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        if (fabs(points_y[i] - utoch(points_x[i])) > max)
+            max = fabs(points_y[i] - utoch(points_x[i]));
+    }
+    return max;
+}
 int main()
 {
     FILE *f = fopen("test.txt", "w");
@@ -54,8 +80,10 @@ int main()
         *y_points = malloc(sizeof(double)* n);
     double step = (finish - start)/(n-1);
     x_filling(x_points);
-    k_points[0] = 1;
-    v_points[0] = step * utoch_der(x_points[1]);
+    // k_points[0] = 1;
+    // v_points[0] = step * utoch_der(x_points[1]);
+    k_points[0] = 0;
+    v_points[0] = utoch(x_points[0]);
     y_points[n-1] = utoch(x_points[n-1]);
     for(int i = 1; i < n;++i)
     {
@@ -70,5 +98,6 @@ int main()
         y_points[i] = k_points[i] * y_points[i+1] + v_points[i];
     }
     file_write(f, x_points, y_points);
+    printf("\n%lf\n", max_error(x_points, y_points));
     return 0;
 }
